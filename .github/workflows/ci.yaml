@@ -1,6 +1,7 @@
 name: CI - Build, Scan, SBOM
 on: [push, pull_request]
 
+
 env:
   IMAGE: ozdemire/fastapi-app
   TAG: latest
