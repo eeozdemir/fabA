@@ -2,7 +2,7 @@ name: CI - Build, Scan, SBOM
 on: [push, pull_request]
 
 env:
-  IMAGE: yourrepo/fastapi-app
+  IMAGE: ozdemire/fastapi-app
   TAG: latest
 
 jobs:
