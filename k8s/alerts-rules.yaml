@@ -1,0 +1,11 @@
+groups:
+- name: fastapi.rules
+  rules:
+  - alert: HighErrorRate
+    expr: sum(rate(http_requests_total{status=~"5.."}[5m])) / sum(rate(http_requests_total[5m])) > 0.05
+    for: 2m
+    labels:
+      severity: warning
+    annotations:
+      summary: "5xx error rate > 5%"
+      description: "Last 5 minutes 5xx ratio exceeded 5%"

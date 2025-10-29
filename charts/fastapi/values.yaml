@@ -1,0 +1,38 @@
+image:
+  repository: docker.io/ozdemire/fastapi-app
+  tag: "latest"
+  pullPolicy: IfNotPresent
+
+replicaCount: 2
+
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 8000
+
+resources:
+  limits:
+    cpu: "500m"
+    memory: "256Mi"
+  requests:
+    cpu: "100m"
+    memory: "128Mi"
+
+probes:
+  readinessPath: /readyz
+  livenessPath: /healthz
+  initialDelay: 5
+  period: 10
+  timeout: 2
+
+hpa:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 5
+  cpuAvgUtil: 70
+
+networkPolicy:
+  enabled: true
+  allowedNamespaces:
+    - default
+    - ingress-nginx
