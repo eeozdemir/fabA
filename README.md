@@ -41,18 +41,53 @@ This structure ensures:
 Since the case allows using local tools, I used Minikube (Docker driver + Calico CNI).
 It’s light, ARM64 compatible, and supports real NetworkPolicies and HPA metrics.
 
-# Start Minikube with Calico for network policies
+- Start Minikube with Calico for network policies
 minikube start --driver=docker --cni=calico --cpus=4 --memory=6g
 
-# Enable metrics-server for HPA and observability
+- Enable metrics-server for HPA and observability
 minikube addons enable metrics-server
 
-# Optional: enable ingress for future routing
+- Optional: enable ingress for future routing
 minikube addons enable ingress
-
 
 Reasoning:
 Using Calico enforces real NetworkPolicies, metrics-server enables HPA and latency measurement, and the Docker driver keeps everything inside Docker Desktop (ideal for Mac).
+
+3.1 Kubernetes Dashboard Access (Optional)
+
+For visual cluster management and real-time monitoring, you can enable the Kubernetes Dashboard in Minikube.
+This provides a browser-based interface to view Pods, Services, HPA activity, and even Prometheus/Grafana components.
+
+1- Enable the Dashboard
+
+Minikube already includes the Dashboard as an addon:
+
+minikube addons enable dashboard
+
+2- Launch the Dashboard
+
+Start the Dashboard service locally and open it in your browser:
+
+minikube dashboard
+
+
+This command sets up a local proxy and usually opens a URL like:
+
+http://127.0.0.1:xxxxx/api/v1/namespaces/kubernetes-dashboard/services/http:kubernetes-dashboard:/proxy/
+
+3️- Secure Login with Token
+
+For a more secure access method:
+
+kubectl create serviceaccount dashboard-admin -n kubernetes-dashboard
+kubectl create clusterrolebinding dashboard-admin-binding \
+  --clusterrole=cluster-admin \
+  --serviceaccount=kubernetes-dashboard:dashboard-admin
+
+kubectl -n kubernetes-dashboard create token dashboard-admin
+
+
+Copy the generated token and paste it into the Dashboard login screen.
 
 4.Application Design
 
